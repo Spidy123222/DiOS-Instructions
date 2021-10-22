@@ -7,6 +7,7 @@ New-NetFirewallRule -Name sshd -DisplayName 'Allow SSH' -Enabled True -Direction
 md ~/.ssh
 cd ~/.ssh
 ssh-keygen
+
 remove-item ~/.ssh/authorized_keys.pub
 echo .
 echo .

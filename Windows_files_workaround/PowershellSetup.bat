@@ -1,0 +1,1 @@
+powershell -command "Start-Process Powershell -Verb RunAs \"-command "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned \"
