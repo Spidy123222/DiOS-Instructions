@@ -2,124 +2,107 @@ echo "#########################################################"
 echo "# jkcoxson and spidy123222's DolphiniOS install script. #"
 echo "#########################################################\n\n\n"
 
-if [ "$EUID" -ne 0 ]
+if [ "$EUID" -eq 0 ]
   then echo "Please run as root. Exiting..."
   exit
 fi
 
+## thanks dracc#8170 in discord for code cleanup
+
 echo "Root check passed, continue install."
 
-apt-get install git -y
+pkexec apt-get update
 
-apt install build-essential -y
+pkexec apt-get install -y \
+       autoconf \
+       autoheader \
+       automake \
+       build-essential \
+       checkinstall \
+       clang \
+       cpp \
+       cython
 
-apt-get install glibtool -y
-apt-get install make -y
+pkexec dpkg --configure -a
 
+pkexec apt-get install -y \
+       gcc-8 \
+       git \
+       glibtool \
+       libavahi-client-dev \
+       libc6-dev \
+       libc6-udeb \
+       libplist++ \
+       libplist++-dev \
+       libssl-dev \
+       libtool \
+       libtool-bin \
+       libusb-1.0-0-dev \
+       m4 \
+       make \
+       pkg-config \
+       python-dev
 
-apt-get install cpp -y
-apt-get install gcc-8 -y
+pkexec apt-get install python-dev --fix-missing -y
 
-
-apt-get update -y
-apt-get upgrade -y
-
-
-apt-get clang -y
-apt-get install build-essential checkinstall git autoconf automake -y
-
-apt install libtool m4 automake -y
-
-apt-get install python-dev -y
-apt-get install pkg-config -y
-
-apt-get install libavahi-client-dev -y
-apt-get install python-dev --fix-missing -y
-
-
-apt-get install cython -y
-dpkg --configure -a
-python setup.py install
-
-
-apt-get autoheader -y
-apt-get install libusb-1.0-0-dev -y
-
-
-apt-get install libssl-dev -y
-apt-get install libc6-udeb -y
-
-
-apt-get install libc6-dev -y
-apt-get install libtool-bin -y
-
-
-apt-get install libplist++-dev -y
-apt-get install libplist++ -y
-
+pkexec python setup.py install
 
 mkdir openssl
-cd openssl
+pushd openssl
 wget https://www.openssl.org/source/openssl-${OPENSSL_VER}.tar.gz
 tar xf openssl-${OPENSSL_VER}.tar.gz
 cd openssl-${OPENSSL_VER}
 ./config zlib shared no-ss13
 make -j4
-make install
-cd ..
-cd ..
+pkexec make install
+popd
 
 git clone https://github.com/libimobiledevice/libplist
-cd libplist
+pushd libplist
 ./autogen.sh --enable-debug
 ./autogen.sh --enable-debug
 make
-make install
-cd ../
+pkexec make install
+popd
 
 
 git clone https://github.com/jkcoxson/libusbmuxd
-cd libusbmuxd
+pushd libusbmuxd
 ./autogen.sh --enable-debug
 ./autogen.sh --enable-debug
 make
-make install
-cd ../
+pkexec make install
+popd
 
 git clone https://github.com/jkcoxson/libimobiledevice
-cd libimobiledevice
+pushd libimobiledevice
 ./autogen.sh --enable-debug
 ./autogen.sh --enable-debug
 make
-make install
-cd ../
+pkexec make install
+popd
 
 git clone https://github.com/jkcoxson/usbmuxd2
-cd usbmuxd2
+pushd usbmuxd2
 ./autogen.sh --enable-debug
 ./autogen.sh --enable-debug
 make
-make install
-cd ../
+pkexec make install
+popd
 
 git clone https://github.com/tihmstar/libgeneral.git
-cd libgeneral
+pushd libgeneral
 ./autogen.sh --enable-debug
 ./autogen.sh --enable-debug
 make
-make install
-cd ../
+pkexec make install
+popd
 
-apt-get install libplist++-dev -y
-apt-get install libplist++ -y
+pkexec ldconfig
 
-
-ldconfig
-echo
-echo
-echo
-echo "##############################"
-echo "#   Installation Completed.  #"
-echo "##############################\n\n\n"
+echo "
+##############################
+#   Installation Completed.  #
+##############################"
 
 idevice_id
