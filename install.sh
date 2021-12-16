@@ -7,7 +7,7 @@ if [ "$EUID" -eq 0 ]
   exit
 fi
 
-## thanks dracc#8170 in discord for code cleanup
+## thanks dracc#8170 in discord for helping in code cleanup
 
 echo "Root check passed, continue install."
 
